@@ -11,6 +11,14 @@ class MoviesViewController: UIViewController {
     
     private let movieCellNibName = "MovieCollectionViewCell"
     private let movieCellIdn = "MovieCollectionViewCell"
+    
+    private let baseUrl = "https://api.themoviedb.org/3/movie/popular?api_key="
+    private let apiKey = "02c993458c7380c40c21e2e8bb7069a8"
+    var stringUrl: String {
+        return baseUrl + apiKey
+    }
+    
+    let strUrl = "https://jsonplaceholder.typicode.com/users/1/todos"
 
     @IBOutlet weak var collectionView: UICollectionView? {
         didSet {
@@ -20,12 +28,24 @@ class MoviesViewController: UIViewController {
     }
     
     var movies = ["One", "Two", "Three"]
-    
+//    var tests = [Test]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         registerCells()
+        
+        let session = URLSession.shared
+        guard let url = URL(string: strUrl) else {
+            return
+        }
+        let task = session.dataTask(with: url) { data, response, error in
+            let test = try? JSONDecoder().decode([Test].self, from: data!)
+            for item in test! {
+                print(item)
+            }
+        }
+        task.resume()
         
     }
     
